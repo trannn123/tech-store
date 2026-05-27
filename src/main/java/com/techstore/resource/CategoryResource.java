@@ -1,51 +1,50 @@
 package com.techstore.resource;
 
-import com.techstore.entity.Product;
-import com.techstore.repository.ProductRepository;
-import com.techstore.service.ProductService;
+import com.techstore.entity.Category;
+import com.techstore.service.CategoryService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 
-@Path("/products")
+@Path("/categories")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ProductResource {
+public class CategoryResource {
 
     @Inject
-    ProductService service;
+    CategoryService service;
 
     @GET
-    public List<Product> getAll(){
+    public List<Category> getAll() {
         return service.getAll();
     }
 
     @GET
     @Path("/{id}")
-    public Response getById(@PathParam("id") Long id){
-        Product product = service.getById(id);
-        if(product==null){
+    public Response getById(@PathParam("id") Long id) {
+        Category category = service.getById(id);
+        if (category == null) {
             return Response.status(404).build();
         }
-        return Response.ok(product).build();
+        return Response.ok(category).build();
     }
 
     @POST
-    public Response create(@Valid Product product){
-        service.create(product);
+    public Response create(@Valid Category category) {
+        service.create(category);
         return Response.status(201).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, Product request){
-        Product updated = service.update(id, request);
-        if(updated==null){
+    public Response update(@PathParam("id") Long id,
+                           Category request) {
+        Category updated = service.update(id, request);
+        if (updated == null) {
             return Response.status(404).build();
         }
         return Response.ok(updated).build();
@@ -53,13 +52,11 @@ public class ProductResource {
 
     @DELETE
     @Path("/{id}")
-    public Response delete(@PathParam("id") Long id){
+    public Response delete(@PathParam("id") Long id) {
         boolean deleted = service.delete(id);
-        if(!deleted){
+        if (!deleted) {
             return Response.status(404).build();
         }
         return Response.noContent().build();
     }
-
-
 }
