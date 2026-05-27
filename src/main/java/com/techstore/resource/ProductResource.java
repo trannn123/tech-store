@@ -3,6 +3,8 @@ package com.techstore.resource;
 import com.techstore.entity.Product;
 import com.techstore.repository.ProductRepository;
 import com.techstore.service.ProductService;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -21,12 +23,14 @@ public class ProductResource {
     ProductService service;
 
     @GET
+    @PermitAll
     public List<Product> getAll(){
         return service.getAll();
     }
 
     @GET
     @Path("/{id}")
+    @PermitAll
     public Response getById(@PathParam("id") Long id){
         Product product = service.getById(id);
         if(product==null){
@@ -36,6 +40,7 @@ public class ProductResource {
     }
 
     @POST
+    @RolesAllowed("ADMIN")
     public Response create(@Valid Product product){
         service.create(product);
         return Response.status(201).build();
@@ -43,6 +48,7 @@ public class ProductResource {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed("ADMIN")
     public Response update(@PathParam("id") Long id, Product request){
         Product updated = service.update(id, request);
         if(updated==null){
@@ -53,6 +59,7 @@ public class ProductResource {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed("ADMIN")
     public Response delete(@PathParam("id") Long id){
         boolean deleted = service.delete(id);
         if(!deleted){
